@@ -30,16 +30,12 @@ public class JDAListener extends ListenerAdapter {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
                 channel.sendMessage("```" + UserProfile.total(teamID) + "```").queue();
-            } catch (RuntimeException e) {
-                channel.sendMessage("invalid team ID or incorrect format").queue();
-            } catch (IOException e) {
-                channel.sendMessage("invalid team ID or incorrect format").queue();
+            } catch (RuntimeException | IOException e) {
+                channel.sendMessage("Invalid team ID or incorrect format. Use the command &help for more information").queue();
             }
         }
         if (input.equals("help")) {
             channel.sendMessage("WIP:only one command\n&total <team id>").queue();
-
-
         }
     }
 }
