@@ -12,4 +12,6 @@ repositories {
 }
 dependencies {
     compile "net.dv8tion:JDA:4.1.0_81"
+    implementation 'org.json:json:20190722'
+
 }
