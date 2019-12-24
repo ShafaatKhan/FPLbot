@@ -12,7 +12,7 @@ public class UserProfile {
     public static String total(int teamID) throws IOException {
         String data = "";
 
-        URL url = new URL("https://fantasy.premierleague.com/api/entry/"+teamID+"/history/");
+        URL url = new URL("https://fantasy.premierleague.com/api/entry/" + teamID + "/history/");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();

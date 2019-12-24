@@ -4,14 +4,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Scanner;
-
 
 public class JDAListener extends ListenerAdapter {
     private static final String PREFIX = "&";
@@ -35,7 +29,7 @@ public class JDAListener extends ListenerAdapter {
             try {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
-                channel.sendMessage("```"+UserProfile.total(teamID)+"```").queue();
+                channel.sendMessage("```" + UserProfile.total(teamID) + "```").queue();
             } catch (IOException e) {
                 e.printStackTrace();
             }
