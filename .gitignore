@@ -1,2 +1,5 @@
-./idea
-./gradle
+./idea/
+./gradle/
+/botToken
+/gradlew.bat
+/gradlew
