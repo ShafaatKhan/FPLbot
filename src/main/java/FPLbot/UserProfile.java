@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+//NumberFormatException
 public class UserProfile {
     public static String total(int teamID) throws IOException {
         String data = "";
