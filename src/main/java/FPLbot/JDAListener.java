@@ -36,5 +36,10 @@ public class JDAListener extends ListenerAdapter {
                 channel.sendMessage("invalid team ID or incorrect format").queue();
             }
         }
+        if (input.equals("help")) {
+            channel.sendMessage("WIP:only one command\n&total <team id>").queue();
+
+
+        }
     }
 }
