@@ -1,21 +1,52 @@
 package FPLbot;
 
-import jdk.nashorn.internal.parser.JSONParser;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-import org.json.*;
-
 
 public class JDAListener extends ListenerAdapter {
     private static final String PREFIX = "&";
+
+    public static void profile() throws IOException {
+        String data = "";
+
+        URL url = new URL("https://fantasy.premierleague.com/api/entry/123867/history/");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        int responsecode = connection.getResponseCode();
+        System.out.println("Response code is: " + responsecode);
+
+        if (responsecode != 200)
+            throw new RuntimeException("HttpResponseCode: " + responsecode);
+        else {
+            Scanner sc = new Scanner(url.openStream());
+            while (sc.hasNext())
+                data += sc.nextLine();
+            sc.close();
+        }
+        JSONObject obj = new JSONObject(data);
+        JSONArray current = (JSONArray) obj.get("current");
+        JSONObject main = (JSONObject) current.get(0);
+        System.out.println(main.get("total_points").toString());
+    }
+
+    public static void main(String[] args) throws IOException {
+        try {
+            profile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
@@ -42,26 +73,5 @@ public class JDAListener extends ListenerAdapter {
 //            }
 //        }
     }
-
-//    public String profile() throws IOException {
-//        String data = "";
-//
-//        URL url = new URL("https://fantasy.premierleague.com/api/leagues-classic/408284/standings/");
-//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//        connection.setRequestMethod("GET");
-//        connection.connect();
-//        int responsecode = connection.getResponseCode();
-//        System.out.println("Response code is: " + responsecode);
-//
-//        if (responsecode != 200)
-//            throw new RuntimeException("HttpResponseCode: " + responsecode);
-//        else {
-//
-//            Scanner sc = new Scanner(url.openStream());
-//            while (sc.hasNext())
-//                data += sc.nextLine();
-//            sc.close();
-//        }
-//    }
 }
 
