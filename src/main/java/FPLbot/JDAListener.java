@@ -34,5 +34,10 @@ public class JDAListener extends ListenerAdapter {
                 e.printStackTrace();
             }
         }
+        if (input.equals("help")) {
+            channel.sendMessage("WIP:only one command\n&total <team id>").queue();
+
+
+        }
     }
 }
