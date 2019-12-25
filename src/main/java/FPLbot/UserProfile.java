@@ -28,13 +28,23 @@ public class UserProfile {
         return data;
     }
 
+    //method for finding the total points of a user given the team id
     public static String total(int teamID) throws IOException {
         String data = JSONtoString(teamID);
-
         JSONObject obj = new JSONObject(data);
         JSONArray current = (JSONArray) obj.get("current");
         JSONObject main = (JSONObject) current.get(current.length() - 1); //get the last occurrence to get the total points
         String totalPoints = "Your current total points is: " + main.get("total_points").toString();
         return totalPoints;
+    }
+
+    //method for finding the gameweek rank of a user given the team id and gameweek number
+    public static String gameweekRank(int teamID, int gameweek) throws IOException {
+        String data = JSONtoString(teamID);
+        JSONObject obj = new JSONObject(data);
+        JSONArray current = (JSONArray) obj.get("current");
+        JSONObject main = (JSONObject) current.get(gameweek - 1); //subtract by 1 to get actual gameweek since array index starts from 0
+        String gameweekRank = "Your rank for gameweek " + gameweek + ": is " + main.get("rank").toString();
+        return gameweekRank;
     }
 }
