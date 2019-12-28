@@ -4,10 +4,12 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.awt.*;
 import java.io.IOException;
 
-public class JDAListener extends ListenerAdapter {
+public class Commands extends ListenerAdapter {
     private static final String PREFIX = ".";
 
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -27,17 +29,6 @@ public class JDAListener extends ListenerAdapter {
             channel.sendMessage("passed").queue();
         }
 
-        //displays the total points of a user
-        if (input.startsWith("total ")) {
-            try {
-                String id = input.substring(input.indexOf(" "));
-                int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
-                channel.sendMessage("```" + UserProfile.total(teamID) + "```").queue();
-            } catch (RuntimeException | IOException e) {
-                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
-            }
-        }
-
         //displays the rank of a user for a specified gameweek
         if (input.startsWith("gw ") || input.startsWith("gameweek ")) {
             try {
@@ -51,12 +42,12 @@ public class JDAListener extends ListenerAdapter {
             }
         }
 
-        //displays the overall rank of a user
-        if (input.startsWith("or ") || input.startsWith("overallrank ")) {
+        //displays overall rank and total points (so far)
+        if(input.startsWith("info ")){
             try {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
-                channel.sendMessage("```" + UserProfile.overallRank(teamID) + "```").queue();
+                channel.sendMessage(UserProfile.teamInfo(teamID).build()).queue();
             } catch (RuntimeException | IOException e) {
                 channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
@@ -70,7 +61,8 @@ public class JDAListener extends ListenerAdapter {
                     "in your mini league\nmaybe add team name\n- .tv/teamvalue command for checking team value" +
                     "\n- command for checking how many points you lost through negative transfers\n- command for checking how " +
                     "many points you had on bench in total\n- command for comparing 2 different teams points/rank etc\n" +
-                    "- make it so that user can just copy paste their team link and extract team id from it? maybe").queue();
+                    "- make it so that user can just copy paste their team link and extract team id from it? maybe\n" +
+                    "- maybe make one command .profile that shows rank, points etc").queue();
         }
 
         //info on how to use the bot

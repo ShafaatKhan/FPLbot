@@ -16,7 +16,7 @@ public class Main extends ListenerAdapter {
         Path path = Paths.get("botToken");
         String botToken = Files.readString(path);
         builder.setToken(botToken);
-        builder.addEventListeners(new JDAListener());
+        builder.addEventListeners(new Commands());
         builder.build();
     }
 
