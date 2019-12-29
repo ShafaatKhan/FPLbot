@@ -36,7 +36,7 @@ public class Commands extends ListenerAdapter {
                 String[] inputs = id.trim().split("\\s+");//get rid of whitespace
                 int teamID = Integer.parseInt(inputs[0]);//convert first number(team ID) to integer
                 int gameweek = Integer.parseInt(inputs[1]);//convert second number(gameweek number) to integer
-                channel.sendMessage("```" + UserProfile.gameweekRank(teamID, gameweek) + "```").queue();
+                channel.sendMessage("```" + UserProfile.gameweekInfo(teamID, gameweek) + "```").queue();
             } catch (RuntimeException | IOException e) {
                 channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
@@ -58,11 +58,11 @@ public class Commands extends ListenerAdapter {
             channel.sendMessage("- make something like a registration thing where people " +
                     "can register their team id so if they do .profile it'll show their stats\n- command for" +
                     " checking top 5/10 overall using .top\n- command for checking what rank you're in " +
-                    "in your mini league\nmaybe add team name\n- .tv/teamvalue command for checking team value" +
+                    "in your mini league\nmaybe add team name" +
                     "\n- command for checking how many points you lost through negative transfers\n- command for checking how " +
                     "many points you had on bench in total\n- command for comparing 2 different teams points/rank etc\n" +
                     "- make it so that user can just copy paste their team link and extract team id from it? maybe\n" +
-                    "- maybe make one command .profile that shows rank, points etc").queue();
+                    "- maybe make one command .profile that shows their rank, points etc").queue();
         }
 
         //info on how to use the bot

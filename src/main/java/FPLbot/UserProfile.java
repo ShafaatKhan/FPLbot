@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class UserProfile {
@@ -32,31 +33,60 @@ public class UserProfile {
         return data;
     }
 
-    //finds the gameweek rank of a user given the team ID and gameweek number
-    public static String gameweekRank(int teamID, int gameweek) throws IOException {
+    //finds the gameweek info(rank and points) of a user given the team ID and gameweek number
+    public static String gameweekInfo(int teamID, int gameweek) throws IOException {
         String data = teamHistory(teamID);
         JSONObject obj = new JSONObject(data);
         JSONArray current = (JSONArray) obj.get("current");
-        JSONObject main = (JSONObject) current.get(gameweek - 1);//subtract by 1 to get actual gameweek since array index starts from 0
-        String gameweekRank = "Your rank for gameweek " + gameweek + ": is " + main.get("rank").toString();
-        return gameweekRank;
+        int length = gameweek - 1;
+
+        JSONObject main = (JSONObject) current.get(length);
+        String gameweekInfo = "Your rank for gameweek " + gameweek + ": is " + main.get("rank").toString();
+
+        main = (JSONObject) current.get(length);
+        gameweekInfo = gameweekInfo + " and your points for the gameweek are: " + main.get("points").toString();
+        return gameweekInfo;
     }
 
-    public static EmbedBuilder teamInfo(int teamID) throws IOException{
+    public static EmbedBuilder teamInfo(int teamID) throws IOException {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("FPLbot");
+        embed.setTitle("Team Info");
         embed.setColor(Color.MAGENTA);
-        embed.setDescription(teamID +"'s team info");//temporary for now until I grab team names
+        embed.setColor(new Color(54, 12, 58));
+        embed.setDescription(teamID + "'s team info");//temporary for now until I grab team names
 
         String data = teamHistory(teamID);
         JSONObject obj = new JSONObject(data);
         JSONArray current = (JSONArray) obj.get("current");
-        JSONObject main = (JSONObject) current.get(current.length() - 1);//get the last occurrence to get the total points
+        int length = current.length() - 1;
+
+        JSONObject main = (JSONObject) current.get(length);//get the last occurrence to get the total points
         String teamInfo = main.get("total_points").toString();
-        embed.addField("Total points: ",teamInfo,false);
-        main = (JSONObject) current.get(current.length() - 1);//subtract by 1 to get actual rank since array index starts from 0
+        embed.addField("Total points: ", teamInfo, false);
+
+        main = (JSONObject) current.get(length);
         teamInfo = main.get("overall_rank").toString();
-        embed.addField("Overall rank: ",teamInfo,false);
+        embed.addField("Overall rank: ", teamInfo, false);
+
+        main = (JSONObject) current.get(length);
+        teamInfo = main.get("value").toString();
+        DecimalFormat df = new DecimalFormat("#.#");
+        //API shows team value as 1061 rather than 106.1 so divide by 10 to get actual team value
+        double totalValue = Double.parseDouble(teamInfo.trim()) / 10.0;
+        teamInfo = main.get("bank").toString();
+        double bankValue = Double.parseDouble(teamInfo.trim()) / 10.0;
+        double squadValue = totalValue - bankValue;
+        String teamValue = squadValue + "";
+        embed.addField("Squad value (Bank): ", df.format(squadValue) + " (" + bankValue + ")", false);
+
+        main = (JSONObject) current.get(length);
+        teamInfo = main.get("rank").toString();
+        embed.addField("Last gameweek's rank (GW #" + length + "): ", teamInfo, false);
+
+        main = (JSONObject) current.get(length);
+        teamInfo = main.get("points").toString();
+        embed.addField("Last gameweek's points (GW #" + length + "): ", teamInfo, false);
+
         return embed;
     }
 }
