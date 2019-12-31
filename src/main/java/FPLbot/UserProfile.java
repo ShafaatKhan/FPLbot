@@ -33,7 +33,37 @@ public class UserProfile {
         return data;
     }
 
-    //finds the gameweek info(rank and points) of a user given the team ID and gameweek number
+    //returns how many total points you lost from transfers
+    public static String pointsLost(int teamID) throws IOException {
+        String data = teamHistory(teamID);
+        JSONObject obj = new JSONObject(data);
+        JSONArray current = (JSONArray) obj.get("current");
+        JSONObject main;
+        int points = 0;
+
+        for (int i = 0; i < current.length(); i++) {
+            main = (JSONObject) current.get(i);
+            points = points + Integer.parseInt(main.get("event_transfers_cost").toString().trim());
+        }
+        return "You lost a total of **" + String.valueOf(points) + "** points from transfers since the beginning of the season";
+    }
+
+    //return how many points your bench got in total
+    public static String bench(int teamID) throws IOException {
+        String data = teamHistory(teamID);
+        JSONObject obj = new JSONObject(data);
+        JSONArray current = (JSONArray) obj.get("current");
+        JSONObject main;
+        int bench = 0;
+
+        for (int i = 0; i < current.length(); i++) {
+            main = (JSONObject) current.get(i);
+            bench = bench + Integer.parseInt(main.get("points_on_bench").toString().trim());
+        }
+        return "Your bench got a total of **" + String.valueOf(bench) + "** points since the beginning of the season";
+    }
+
+    //returns the gameweek info(rank and points) of a user given the team ID and gameweek number
     public static String gameweekInfo(int teamID, int gameweek) throws IOException {
         String data = teamHistory(teamID);
         JSONObject obj = new JSONObject(data);
@@ -48,6 +78,7 @@ public class UserProfile {
         return gameweekInfo;
     }
 
+    //returns total points, overall rank, team value, latest gameweek rank and points
     public static EmbedBuilder teamInfo(int teamID) throws IOException {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Team Info");
@@ -81,11 +112,11 @@ public class UserProfile {
 
         main = (JSONObject) current.get(length);
         teamInfo = main.get("rank").toString();
-        embed.addField("Last gameweek's rank (GW #" + length + "): ", teamInfo, false);
+        embed.addField("Last gameweek's rank (GW #" + current.length() + "): ", teamInfo, false);
 
         main = (JSONObject) current.get(length);
         teamInfo = main.get("points").toString();
-        embed.addField("Last gameweek's points (GW #" + length + "): ", teamInfo, false);
+        embed.addField("Last gameweek's points (GW #" + current.length() + "): ", teamInfo, false);
 
         return embed;
     }

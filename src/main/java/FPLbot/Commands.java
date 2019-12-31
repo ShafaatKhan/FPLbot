@@ -36,14 +36,14 @@ public class Commands extends ListenerAdapter {
                 String[] inputs = id.trim().split("\\s+");//get rid of whitespace
                 int teamID = Integer.parseInt(inputs[0]);//convert first number(team ID) to integer
                 int gameweek = Integer.parseInt(inputs[1]);//convert second number(gameweek number) to integer
-                channel.sendMessage("```" + UserProfile.gameweekInfo(teamID, gameweek) + "```").queue();
+                channel.sendMessage(UserProfile.gameweekInfo(teamID, gameweek)).queue();
             } catch (RuntimeException | IOException e) {
                 channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
         }
 
         //displays overall rank and total points (so far)
-        if(input.startsWith("info ")){
+        if (input.startsWith("info ")) {
             try {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
@@ -53,14 +53,36 @@ public class Commands extends ListenerAdapter {
             }
         }
 
+        //displays points lost from transfers
+        if (input.startsWith("pointslost ") || input.startsWith("pl ")) {
+            try {
+                String id = input.substring(input.indexOf(" "));
+                int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
+                channel.sendMessage(UserProfile.pointsLost(teamID)).queue();
+            } catch (RuntimeException | IOException e) {
+                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
+            }
+        }
+
+        //displays points your bench got in total
+        if (input.startsWith("bench ")) {
+            try {
+                String id = input.substring(input.indexOf(" "));
+                int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
+                channel.sendMessage(UserProfile.bench(teamID)).queue();
+            } catch (RuntimeException | IOException e) {
+                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
+            }
+        }
+
         //ideas for upcoming updates
-        if(input.equals("todo")){
+        if (input.equals("todo")) {
             channel.sendMessage("- make something like a registration thing where people " +
                     "can register their team id so if they do .profile it'll show their stats\n- command for" +
                     " checking top 5/10 overall using .top\n- command for checking what rank you're in " +
                     "in your mini league\nmaybe add team name" +
-                    "\n- command for checking how many points you lost through negative transfers\n- command for checking how " +
-                    "many points you had on bench in total\n- command for comparing 2 different teams points/rank etc\n" +
+                    "\n- command for checking how many points you had on bench in total\n" +
+                    "- command for comparing 2 different teams points/rank etc\n" +
                     "- make it so that user can just copy paste their team link and extract team id from it? maybe\n" +
                     "- maybe make one command .profile that shows their rank, points etc").queue();
         }
@@ -68,7 +90,7 @@ public class Commands extends ListenerAdapter {
         //info on how to use the bot
         if (input.equals("help")) {
             channel.sendMessage(".total [teamID]\n.gw or .gameweek [teamID] [gameweek number]" +
-                    "\n.or or .overallrank [teamID]").queue();
+                    "\n.info [teamID] \n.pointslost or .pl [teamID] \n.bench [teamID]").queue();
         }
     }
 }
