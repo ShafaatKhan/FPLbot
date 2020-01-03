@@ -29,50 +29,35 @@ public class Commands extends ListenerAdapter {
             channel.sendMessage("passed").queue();
         }
 
-        //displays the rank of a user for a specified gameweek
-        if (input.startsWith("gw ") || input.startsWith("gameweek ")) {
-            try {
+        try{
+            if (input.startsWith("gw ") || input.startsWith("gameweek ")) {
                 String id = input.substring(input.indexOf(" "));
                 String[] inputs = id.trim().split("\\s+");//get rid of whitespace
                 int teamID = Integer.parseInt(inputs[0]);//convert first number(team ID) to integer
                 int gameweek = Integer.parseInt(inputs[1]);//convert second number(gameweek number) to integer
                 channel.sendMessage(UserProfile.gameweekInfo(teamID, gameweek)).queue();
-            } catch (RuntimeException | IOException e) {
-                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
-        }
 
-        //displays overall rank and total points (so far)
-        if (input.startsWith("info ")) {
-            try {
+            if (input.startsWith("info ")) {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
                 channel.sendMessage(UserProfile.teamInfo(teamID).build()).queue();
-            } catch (RuntimeException | IOException e) {
-                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
-        }
 
-        //displays points lost from transfers
-        if (input.startsWith("pointslost ") || input.startsWith("pl ")) {
-            try {
+            if (input.startsWith("pointslost ") || input.startsWith("pl ")) {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
                 channel.sendMessage(UserProfile.pointsLost(teamID)).queue();
-            } catch (RuntimeException | IOException e) {
-                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
-        }
 
-        //displays points your bench got in total
-        if (input.startsWith("bench ")) {
-            try {
+            if (input.startsWith("bench ")) {
                 String id = input.substring(input.indexOf(" "));
                 int teamID = Integer.parseInt(id.trim()); //get rid of space and convert to integer
                 channel.sendMessage(UserProfile.bench(teamID)).queue();
-            } catch (RuntimeException | IOException e) {
-                channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
             }
+
+        }catch(RuntimeException | IOException e){
+            channel.sendMessage("Invalid team ID or incorrect format. Use the command .help for more information").queue();
         }
 
         //ideas for upcoming updates
@@ -89,7 +74,7 @@ public class Commands extends ListenerAdapter {
 
         //info on how to use the bot
         if (input.equals("help")) {
-            channel.sendMessage(".total [teamID]\n.gw or .gameweek [teamID] [gameweek number]" +
+            channel.sendMessage(".gw or .gameweek [teamID] [gameweek number]" +
                     "\n.info [teamID] \n.pointslost or .pl [teamID] \n.bench [teamID]").queue();
         }
     }
